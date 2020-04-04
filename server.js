@@ -6,6 +6,15 @@ dotenv.config({path: './config/config.env'});
 
 const app = express();
 
+// Route Files
+
+const bootcamps = require('./routes/bootcamps.js');
+
+
+// Mount Router
+
+app.use('/api/v1/bootcamp',bootcamps);
+
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () =>{
