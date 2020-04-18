@@ -16,10 +16,14 @@ dotenv.config({
 connectDB();
 const app = express();
 
+// Body Parser
+
+app.use(express.json());
+
 // Route Files
 const bootcamps = require("./routes/bootcamps.js");
 
-app.use(morgan);
+app.use(morgan('dev'));
 // Mount Router
 app.use("/api/v1/bootcamp", bootcamps);
 
@@ -28,7 +32,7 @@ const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {
   console.log(
     `The server is running in ${process.env.NODE_ENV} mode on ${PORT}`.yellow
-      .bold
+    .bold
   );
 });
 
