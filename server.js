@@ -2,6 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const colors = require("colors");
+const errorHandler = require('./middleware/error');
 const connectDB = require("./config/db");
 
 // My custom middleware for loggin
@@ -23,16 +24,19 @@ app.use(express.json());
 // Route Files
 const bootcamps = require("./routes/bootcamps.js");
 
+
 app.use(morgan('dev'));
 // Mount Router
 app.use("/api/v1/bootcamp", bootcamps);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 3000;
 
 const server = app.listen(PORT, () => {
   console.log(
-    `The server is running in ${process.env.NODE_ENV} mode on ${PORT}`.yellow
-    .bold
+    `The server is running in ${process.env.NODE_ENV} mode on http://localhost:${PORT}`.yellow
+      .bold
   );
 });
 
