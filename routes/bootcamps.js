@@ -2,20 +2,24 @@ const express = require('express');
 const router = express.Router();
 
 const {
-    getBootcamps,
-    getBootcamp,
+    getAllBootcamps,
+    getSingleBootcamp,
+    getBootcampByName,
     createBootcamp,
     updateBootcamp,
     deleteBootcamp
-} = require('../controllers/bootcamps');
+} = require('../Controllers/bootcamps');
 
 router.route('/')
-    .get(getBootcamps)
+    .get(getAllBootcamps)
     .post(createBootcamp);
 
 router.route('/:id')
-    .get(getBootcamp)
+    .get(getSingleBootcamp)
     .put(updateBootcamp)
     .delete(deleteBootcamp);
+
+router.route('/name/:name').get(getBootcampByName)
+
 
 module.exports = router;

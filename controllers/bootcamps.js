@@ -1,30 +1,55 @@
 const errorResponse = require('../utils/errorResponse');
-const Bootcamp = require('../models/Bootcamp');
+const Bootcamp = require('../Models/Bootcamp');
 
-// @desc    to get the list of all bootcamps
-// @route   GET /api/v1/bootcamp
-// @access  public
-exports.getBootcamps = async (req, res, next) => {
+// @Desc    to get the list of all bootcamps
+// @Route   GET /api/v1/bootcamps
+// @Access  Public
+exports.getAllBootcamps = async (req, res, next) => {
     try {
-        const bootcamps = await Bootcamp.find();
+        const bootcamp = await Bootcamp.find();
 
         res.status(200).json({
             success: true,
-            count: bootcamps.length,
-            data: bootcamps
+            count: bootcamp.length,
+            data: bootcamp
         });
     } catch (err) {
-        res.status(400).json({
-            success: false
-        })
+        next(err);
+    }
+
+}
+
+// @Desc    to get a bootccamp by name
+// @Route   GET /api/v1/bootcamps
+// @Access  Private
+exports.getBootcampByName = async (req, res, next) => {
+    try {
+        const bootcamps = await Bootcamp.find();
+        const url = req.url;
+        const nameToSearch = url.split('/')[2];
+
+        for (let i = 0; i < bootcamps.length; i++) {
+            if (nameToSearch === bootcamps[i].name) {
+                return res.status(200).json({
+                    success: true,
+                    data: bootcamps[i]
+                })
+            }
+        }
+
+        res.status(200).json({ msg: 'Got request on /name route', data: bootcamps })
+    } catch (err) {
+        next(err);
     }
 }
 
 
-// @desc    to get a single bootcamp
-// @route   GET /api/v1/bootcamp/:id
-// @access  public
-exports.getBootcamp = async (req, res, next) => {
+
+
+// @Desc    To get a single bootcamp
+// @Route   GET /api/v1/bootcamp/:id
+// @Access  Public
+exports.getSingleBootcamp = async (req, res, next) => {
 
     try {
         const bootcamp = await Bootcamp.findById(req.params.id);
@@ -38,20 +63,16 @@ exports.getBootcamp = async (req, res, next) => {
         });
     } catch (err) {
 
-        next(new errorResponse(`Bootcamp not found with id of ${req.params.id}`, 404));
+        // next(new errorResponse(`Bootcamp not found with id of ${req.params.id}`, 404));
 
-        // next(err);
-
-        // res.status(400).json({
-        //     success: false
-        // });
+        next(err);
     }
 
 }
 
-// @desc    to create a new bootcamp
-// @route   POST /api/v1/bootcamp
-// @access  private
+// @Desc    To create a new bootcamp
+// @Route   POST /api/v1/bootcamp
+// @Access  Private
 exports.createBootcamp = async (req, res, next) => {
 
     try {
@@ -60,18 +81,15 @@ exports.createBootcamp = async (req, res, next) => {
             success: true,
             data: bootcamp
         });
-    } catch (error) {
-        res.status(400).json({
-            success: false,
-            message: error
-        });
+    } catch (err) {
+        next(err)
     }
 
 }
 
-// @desc    to update a bootcamp record
-// @route   PUT /api/v1/bootcamp/:id
-// @access  private
+// @Desc    To update a bootcamp record
+// @Route   PUT /api/v1/bootcamp/:id
+// @Access  Private
 exports.updateBootcamp = async (req, res, next) => {
     try {
         const bootcamp = await Bootcamp.findByIdAndUpdate(req.params.id, req.body, {
@@ -79,26 +97,20 @@ exports.updateBootcamp = async (req, res, next) => {
             runValidators: true
         });
 
-        if (!bootcamp) {
-            return res.status(400).json({
-                success: false
-            });
-        }
+        next(new errorResponse(`Bootcamp not found with id of ${req.params.id}`, 404));
 
         res.status(200).json({
             success: true,
             data: bootcamp
         });
     } catch (err) {
-        res.status(400).json({
-            success: false
-        });
+        next(err)
     }
 }
 
-// @desc    to delete a bootcamp
-// @route   DELETE /api/v1/bootcamp/:id
-// @access  private
+// @Desc    To delete a bootcamp
+// @Route   DELETE /api/v1/bootcamp/:id
+// @Access  Private
 exports.deleteBootcamp = async (req, res, next) => {
     try {
         const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
@@ -114,8 +126,6 @@ exports.deleteBootcamp = async (req, res, next) => {
             data: {}
         });
     } catch (err) {
-        res.status(400).json({
-            success: false
-        });
+        next(err);
     }
 }

@@ -2,7 +2,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const colors = require("colors");
-const errorHandler = require('./middleware/error');
+const errorHandler = require('./Middleware/error');
 const connectDB = require("./config/db");
 
 // My custom middleware for loggin
@@ -18,16 +18,16 @@ connectDB();
 const app = express();
 
 // Body Parser
-
 app.use(express.json());
 
 // Route Files
-const bootcamps = require("./routes/bootcamps.js");
+const bootcamps = require("./Routes/bootcamps.js");
 
-
+// Using Logger Middleware
 app.use(morgan('dev'));
+
 // Mount Router
-app.use("/api/v1/bootcamp", bootcamps);
+app.use("/api/v1/bootcamps", bootcamps);
 
 app.use(errorHandler);
 
