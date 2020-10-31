@@ -23,11 +23,9 @@ exports.getBootcampByName = asyncHandler(async (req, res, next) => {
     const bootcamps = await Bootcamp.find();
     // Remove all url syntax like %20 and all this
     const url = decodeURI(req.url);
-    console.log(url);
     const nameToSearch = url.split('/')[2];
-    console.log("Name to search is", nameToSearch);
-    let found = false;
 
+    let found = false;
     for (let i = 0; i < bootcamps.length; i++) {
         if (nameToSearch == String(bootcamps[i].name)) {
             found = true;
@@ -117,21 +115,21 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
 exports.deleteBootcampByName = asyncHandler(async (req, res, next) => {
 
     const bootcamps = await Bootcamp.find();
-    const url = req.url;
-    const nameToSearch = url.split('/')[2];
+    const url = decodeURI(req.url);
+    const nameToDelete = url.split('/')[2];
     let bootcamp;
     for (let i = 0; i < bootcamps.length; i++) {
-        if (nameToSearch === bootcamps[i].name) {
+        if (nameToDelete === bootcamps[i].name) {
             let idToDelete = bootcamps[i].id;
             bootcamp = await Bootcamp.findByIdAndDelete(idToDelete);
             res.status(200).json({
                 success: true,
-                msg: `Bootcamp deleted with name of ${nameToSearch}`
+                msg: `Bootcamp deleted with name of ${nameToDelete}`
             })
         }
     }
     if (!bootcamp) {
-        return next(new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404));
+        return next(new ErrorResponse(`Bootcamp not found with id of ${req.params.name}`, 404));
     }
 });
 
