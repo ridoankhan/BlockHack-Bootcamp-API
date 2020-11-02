@@ -1,5 +1,6 @@
 const ErrorResponse = require('../utils/errorResponse');
 const Bootcamp = require('../Models/Bootcamp');
+const geocoder = require('../utils/geocoder');
 const asyncHandler = require('../Middleware/async');
 
 // @Desc    to get the list of all bootcamps
@@ -109,7 +110,7 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
     });
 })
 
-// @Desc    To delete a bootccamp by name
+// @Desc    Delete a bootccamp by name
 // @Route   DELETE /api/v1/bootcamps/name/:name
 // @Access  Private
 exports.deleteBootcampByName = asyncHandler(async (req, res, next) => {
@@ -134,13 +135,13 @@ exports.deleteBootcampByName = asyncHandler(async (req, res, next) => {
 });
 
 
-// @Desc    To delete all bootcamps
+// @Desc    Delete all bootcamps
 // @Route   DELETE  /api/v1/bootcamps
 // @Access  Private
 
 exports.deleteAllBootcamps = async (req, res, next) => {
     try {
-        const bootcamp = Bootcamp.find();
+        const bootcamp = await Bootcamp.find();
 
         if (bootcamp.lenght == 0) {
             return res.status(400).json({
@@ -160,3 +161,38 @@ exports.deleteAllBootcamps = async (req, res, next) => {
         next(new ErrorResponse(`Failed to delete documents in bootcamps`, 404))
     }
 }
+
+
+// @desc      Get bootcamps within a radius
+// @route     GET /api/v1/bootcamps/radius/:zipcode/:distance
+// @access    Private
+exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
+    const { zipcode, distance } = req.params;
+
+    // Find the latitude/longitude from the geocoder
+    const loc = await geocoder.geocode(zipcode);
+    const lat = loc[0].latitude;
+    const lng = loc[0].longitude;
+
+    // Calc radius using radians
+    // Divide dist by radius of Earth
+    // Earth Radius = 3,963 mi / 6,378 km
+    const radius = distance / 3963;
+
+    const bootcamps = await Bootcamp.find({
+        location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } }
+    })
+
+    if (!bootcamps) {
+        res.status(400).json({
+            success: true,
+            msg: 'No bootcamp found for the given zipcode within the distance'
+        })
+    }
+
+    res.status(200).json({
+        success: true,
+        count: bootcamps.length,
+        data: bootcamps
+    })
+})
