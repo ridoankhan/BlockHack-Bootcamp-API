@@ -1,6 +1,5 @@
 const ErrorResponse = require('../utils/errorResponse');
 const Bootcamp = require('../Models/Bootcamp');
-const geocoder = require('../utils/geocoder');
 const asyncHandler = require('../Middleware/async');
 
 // @Desc    to get the list of all bootcamps
@@ -21,14 +20,14 @@ exports.getAllBootcamps = asyncHandler(async (req, res, next) => {
 // @Route   GET /api/v1/bootcamps
 // @Access  Private
 exports.getBootcampByName = asyncHandler(async (req, res, next) => {
-    const bootcamps = await Bootcamp.find();
-    // Remove all url syntax like %20 and all this
-    const url = decodeURI(req.url);
-    const nameToSearch = url.split('/')[2];
 
+    const bootcamps = await Bootcamp.find();
+    const url = req.url;
+    const nameToSearch = url.split('/')[2];
     let found = false;
+
     for (let i = 0; i < bootcamps.length; i++) {
-        if (nameToSearch == String(bootcamps[i].name)) {
+        if (nameToSearch === bootcamps[i].name) {
             found = true;
             return res.status(200).json({
                 success: true,
@@ -94,7 +93,7 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 })
 
 // @Desc    To delete a bootcamp
-// @Route   DELETE /api/v1/bootcamp/name/:name
+// @Route   DELETE /api/v1/bootcamp/:id
 // @Access  Private
 exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
 
@@ -110,89 +109,26 @@ exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
     });
 })
 
-// @Desc    Delete a bootccamp by name
-// @Route   DELETE /api/v1/bootcamps/name/:name
+// @Desc    to get a bootccamp by name
+// @Route   GET /api/v1/bootcamps
 // @Access  Private
 exports.deleteBootcampByName = asyncHandler(async (req, res, next) => {
 
     const bootcamps = await Bootcamp.find();
-    const url = decodeURI(req.url);
-    const nameToDelete = url.split('/')[2];
+    const url = req.url;
+    const nameToSearch = url.split('/')[2];
     let bootcamp;
     for (let i = 0; i < bootcamps.length; i++) {
-        if (nameToDelete === bootcamps[i].name) {
+        if (nameToSearch === bootcamps[i].name) {
             let idToDelete = bootcamps[i].id;
             bootcamp = await Bootcamp.findByIdAndDelete(idToDelete);
             res.status(200).json({
                 success: true,
-                msg: `Bootcamp deleted with name of ${nameToDelete}`
+                msg: `Bootcamp deleted with name of ${nameToSearch}`
             })
         }
     }
     if (!bootcamp) {
-        return next(new ErrorResponse(`Bootcamp not found with id of ${req.params.name}`, 404));
+        return next(new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404));
     }
 });
-
-
-// @Desc    Delete all bootcamps
-// @Route   DELETE  /api/v1/bootcamps
-// @Access  Private
-
-exports.deleteAllBootcamps = async (req, res, next) => {
-    try {
-        const bootcamp = await Bootcamp.find();
-
-        if (bootcamp.lenght == 0) {
-            return res.status(400).json({
-                success: false,
-                msg: `No data exist in the collection to delete`
-            })
-        }
-        const deletedBootcamp = await Bootcamp.deleteMany();
-
-        if (deletedBootcamp) {
-            res.status(200).json({
-                success: true,
-                msg: `All data in Bootcamp collection deleted`
-            })
-        }
-    } catch (error) {
-        next(new ErrorResponse(`Failed to delete documents in bootcamps`, 404))
-    }
-}
-
-
-// @desc      Get bootcamps within a radius
-// @route     GET /api/v1/bootcamps/radius/:zipcode/:distance
-// @access    Private
-exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
-    const { zipcode, distance } = req.params;
-
-    // Find the latitude/longitude from the geocoder
-    const loc = await geocoder.geocode(zipcode);
-    const lat = loc[0].latitude;
-    const lng = loc[0].longitude;
-
-    // Calc radius using radians
-    // Divide dist by radius of Earth
-    // Earth Radius = 3,963 mi / 6,378 km
-    const radius = distance / 3963;
-
-    const bootcamps = await Bootcamp.find({
-        location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } }
-    })
-
-    if (!bootcamps) {
-        res.status(400).json({
-            success: true,
-            msg: 'No bootcamp found for the given zipcode within the distance'
-        })
-    }
-
-    res.status(200).json({
-        success: true,
-        count: bootcamps.length,
-        data: bootcamps
-    })
-})
