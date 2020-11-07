@@ -11,7 +11,7 @@ const {
     deleteBootcamp,
     deleteBootcampByName,
     deleteAllBootcamps
-} = require('../Controllers/bootcamps');
+} = require('../controllers/bootcamps');
 
 router.route('/')
     .get(getAllBootcamps)   // Get list of all bootcamps

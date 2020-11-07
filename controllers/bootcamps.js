@@ -1,7 +1,7 @@
-const ErrorResponse = require('../Utils/errorResponse');
-const Bootcamp = require('../Models/Bootcamp');
-const geocoder = require('../Utils/geocoder');
-const asyncHandler = require('../Middleware/async');
+const ErrorResponse = require('../utils/errorResponse');
+const Bootcamp = require('../models/Bootcamp');
+const geocoder = require('../utils/geocoder');
+const asyncHandler = require('../middleware/async');
 
 // @Desc    to get the list of all bootcamps
 // @Route   GET /api/v1/bootcamps
@@ -179,6 +179,7 @@ exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
     // Earth Radius = 3,963 mi / 6,378 km
     const radius = distance / 3963;
 
+    // Bootcamps within a given lat and lng will be provided based on radius
     const bootcamps = await Bootcamp.find({
         location: { $geoWithin: { $centerSphere: [[lng, lat], radius] } }
     })
