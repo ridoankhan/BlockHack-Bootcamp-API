@@ -1,6 +1,6 @@
-const ErrorResponse = require('../utils/errorResponse');
+const ErrorResponse = require('../Utils/errorResponse');
 const Bootcamp = require('../Models/Bootcamp');
-const geocoder = require('../utils/geocoder');
+const geocoder = require('../Utils/geocoder');
 const asyncHandler = require('../Middleware/async');
 
 // @Desc    to get the list of all bootcamps
