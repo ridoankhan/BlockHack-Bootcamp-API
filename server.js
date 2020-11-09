@@ -4,6 +4,8 @@ const morgan = require("morgan");
 const colors = require("colors");
 const errorHandler = require('./middleware/error');
 const connectDB = require("./config/db");
+const fs = require('fs');
+const path = require('path');
 
 // My custom middleware for loggin
 // const logger = require('./middleware/logger');
@@ -24,7 +26,15 @@ app.use(express.json());
 const bootcamps = require("./Routes/bootcamps.js");
 
 // Using Logger Middleware
-app.use(morgan('dev'));
+
+// Create write stream to save log
+var accessLogStream = fs.createWriteStream(path.join(__dirname, 'logs', 'access.log'));
+
+app.use(morgan('combined'));
+
+app.use(morgan('combined', {
+  stream: accessLogStream
+}));
 
 // Mount Router
 app.use("/api/v1/bootcamps", bootcamps);
@@ -36,7 +46,7 @@ const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {
   console.log(
     `The server is running in ${process.env.NODE_ENV} mode on http://localhost:${PORT}`.yellow
-      .bold
+    .bold
   );
 });
 
