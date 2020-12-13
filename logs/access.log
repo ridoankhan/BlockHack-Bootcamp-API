@@ -1,2 +1,0 @@
-::1 - - [09/Nov/2020:11:45:31 +0000] "GET /api/v1/bootcamps HTTP/1.1" 200 3064 "-" "PostmanRuntime/7.26.8"
-::1 - - [09/Nov/2020:11:45:42 +0000] "GET /api/v1/bootcamps HTTP/1.1" 200 3064 "-" "PostmanRuntime/7.26.8"
