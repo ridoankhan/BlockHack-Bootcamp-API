@@ -234,6 +234,15 @@ exports.getBootcampsInRadius = asyncHandler(async (req, res, next) => {
 // @access    Private
 
 exports.getRandomQueries = asyncHandler(async (req, res, next) => {
+
+    // Steps to perform random queries
+    // 1. deleting the words like select, sort, page, limit from req.query
+    // 2. convert req.query (reqQuery) to string for manipulation
+    // 3. replace operators like gt, lt with $gt, $lt to enable query in mongodb
+    // 4. Convert req.query (reqQuery) back to JSON object again as mongoDB allows only JSON object not string
+    // 5. find resource in model by performing query in model file with the manipulated req.query (reqQuery)
+    // 5. Manipulated the result query with the select, sort and pagination options from the req.query.select and req.query.sort
+
     // Copy req.query
     const reqQuery = {
         ...req.query
@@ -270,7 +279,7 @@ exports.getRandomQueries = asyncHandler(async (req, res, next) => {
 
     // Pagination by given no of pages and limit per page
     const page = parseInt(req.query.page, 10) || 1;
-    const limit = parseInt(req.query.limit, 10) || 25;
+    const limit = parseInt(req.query.limit, 10) || 1;
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
     const total = await Bootcamp.countDocuments()

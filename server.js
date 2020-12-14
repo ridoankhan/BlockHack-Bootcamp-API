@@ -21,13 +21,15 @@ const app = express();
 app.use(express.json());
 
 // Route Files
-const bootcamps = require("./routes/bootcamps.js");
+const bootcamps = require('./routes/bootcamps.js');
+const courses = require('./routes/courses.js');
 
 // Using Logger Middleware
 app.use(morgan('dev'));
 
 // Mount Router
-app.use("/api/v1/bootcamps", bootcamps);
+app.use('/api/v1/bootcamps', bootcamps);
+app.use('/api/v1/courses', courses);
 
 app.use(errorHandler);
 

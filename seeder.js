@@ -4,10 +4,13 @@ const colors = require('colors')
 const dotenv = require('dotenv')
 
 // Load environment variables
-dotenv.config({ path: './config/config.env' })
+dotenv.config({
+    path: './config/config.env'
+})
 
 // Load bootcamp model
 const Bootcamp = require('./models/Bootcamp')
+const Course = require('./models/Course')
 
 // Connect to DB
 mongoose.connect(process.env.MONGO_URI, {
@@ -19,15 +22,16 @@ mongoose.connect(process.env.MONGO_URI, {
 
 
 // Load JSON file for bootcamp model
-
 const bootcamps = JSON.parse(fs.readFileSync(`${__dirname}/data/bootcamps.json`, 'utf-8'))
+const courses = JSON.parse(fs.readFileSync(`${__dirname}/data/courses.json`, 'utf-8'))
 
 // Import data from bootcamp.json file to the bootcamp collection
 const importData = async () => {
     try {
-        const importResult = await Bootcamp.create(bootcamps)
+        const importResultForBootcamp = await Bootcamp.create(bootcamps);
+        const importResultForCourse = await Course.create(courses);
 
-        if (importResult) {
+        if (importResultForBootcamp && importResultForCourse) {
             console.log('Successfully Data Imported'.green.inverse)
             process.exit()
         }
@@ -40,9 +44,10 @@ const importData = async () => {
 
 const deleteData = async () => {
     try {
-        const deleteResult = await Bootcamp.deleteMany()
+        const deleteResultForBootcamp = await Bootcamp.deleteMany()
+        const deleteResultForCourse = await Course.deleteMany()
 
-        if (deleteResult) {
+        if (deleteResultForBootcamp && deleteResultForCourse) {
             console.log('Deleted Successfully'.green.bgRed)
             process.exit()
         }
