@@ -1,6 +1,5 @@
 const express = require('express');
 const router = express.Router();
-
 const {
     getAllBootcamps,
     getSingleBootcamp,
@@ -12,7 +11,13 @@ const {
     deleteBootcampByName,
     deleteAllBootcamps,
     getRandomQueries
-} = require('../controllers/bootcamps');
+} = require('../controllers/bootcamps.js');
+
+// Include resource routers
+const courseRouter = require('./courses.js');
+
+// Re-route into other resource router
+router.use('/:bootcampId/courses', courseRouter);
 
 router.route('/')
     .get(getAllBootcamps) // Get list of all bootcamps
