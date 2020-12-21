@@ -6,12 +6,17 @@ const router = express.Router({
 });
 
 const {
-    getCourses
+    getAllCourses,
+    getSingleCourse,
+    addCourse
 } = require('../controllers/courses.js');
 
 
-
 router.route('/')
-    .get(getCourses);
+    .get(getAllCourses)
+    .post(addCourse)
+
+router.route('/:id')
+    .get(getSingleCourse)
 
 module.exports = router;

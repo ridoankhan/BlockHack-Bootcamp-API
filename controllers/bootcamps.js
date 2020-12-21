@@ -7,8 +7,6 @@ const asyncHandler = require('../middleware/async');
 // @Route   GET /api/v1/bootcamps
 // @Access  Public
 exports.getAllBootcamps = asyncHandler(async (req, res, next) => {
-    console.log(req.query);
-
     const bootcamp = await Bootcamp.find();
 
     res.status(200).json({
