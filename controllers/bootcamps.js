@@ -2,13 +2,18 @@ const ErrorResponse = require('../utils/errorResponse');
 const Bootcamp = require('../models/Bootcamp');
 const geocoder = require('../utils/geocoder');
 const asyncHandler = require('../middleware/async');
+const {
+    getAllCourses
+} = require('./courses');
 
 // @Desc    to get the list of all bootcamps
 // @Route   GET /api/v1/bootcamps
 // @Access  Public
 exports.getAllBootcamps = asyncHandler(async (req, res, next) => {
-    const bootcamp = await Bootcamp.find();
-
+    const bootcamp = await Bootcamp.find().populate({
+        path: 'courses',
+        select: 'title description'
+    });
     res.status(200).json({
         success: true,
         count: bootcamp.length,
@@ -119,11 +124,13 @@ exports.updateBootcamp = asyncHandler(async (req, res, next) => {
 // @Access  Private
 exports.deleteBootcamp = asyncHandler(async (req, res, next) => {
 
-    const bootcamp = await Bootcamp.findByIdAndDelete(req.params.id);
+    const bootcamp = await Bootcamp.findById(req.params.id);
 
     if (!bootcamp) {
         return next(new ErrorResponse(`Bootcamp not found with id of ${req.params.id}`, 404));
     }
+
+    bootcamp.remove();
 
     res.status(200).json({
         success: true,

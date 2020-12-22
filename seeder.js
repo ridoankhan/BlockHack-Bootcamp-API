@@ -29,9 +29,9 @@ const courses = JSON.parse(fs.readFileSync(`${__dirname}/data/courses.json`, 'ut
 const importData = async () => {
     try {
         const importResultForBootcamp = await Bootcamp.create(bootcamps);
-        const importResultForCourse = await Course.create(courses);
+        // const importResultForCourse = await Course.create(courses);
 
-        if (importResultForBootcamp && importResultForCourse) {
+        if (importResultForBootcamp) { //importResultForBootcamp && importResultForCourse
             console.log('Successfully Data Imported'.green.inverse)
             process.exit()
         }
@@ -45,9 +45,9 @@ const importData = async () => {
 const deleteData = async () => {
     try {
         const deleteResultForBootcamp = await Bootcamp.deleteMany()
-        const deleteResultForCourse = await Course.deleteMany()
+        // const deleteResultForCourse = await Course.deleteMany()
 
-        if (deleteResultForBootcamp && deleteResultForCourse) {
+        if (deleteResultForBootcamp) { // deleteResultForBootcamp && deleteResultForCourse
             console.log('Deleted Successfully'.green.bgRed)
             process.exit()
         }

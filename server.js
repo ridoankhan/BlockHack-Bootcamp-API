@@ -4,6 +4,7 @@ const morgan = require("morgan");
 const colors = require("colors");
 const errorHandler = require('./Middleware/error');
 const connectDB = require("./config/db");
+const cors = require('cors');
 
 // My custom middleware for loggin
 // const logger = require('./middleware/logger');
@@ -19,6 +20,8 @@ const app = express();
 
 // Body Parser
 app.use(express.json());
+
+app.use(cors());
 
 // Route Files
 const bootcamps = require('./routes/bootcamps.js');
