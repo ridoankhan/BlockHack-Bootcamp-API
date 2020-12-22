@@ -8,7 +8,9 @@ const router = express.Router({
 const {
     getAllCourses,
     getSingleCourse,
-    addCourse
+    addCourse,
+    updateCourse,
+    deleteCourse
 } = require('../controllers/courses.js');
 
 
@@ -18,5 +20,7 @@ router.route('/')
 
 router.route('/:id')
     .get(getSingleCourse)
+    .put(updateCourse)
+    .delete(deleteCourse)
 
 module.exports = router;
