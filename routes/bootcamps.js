@@ -13,6 +13,10 @@ const {
     bootcampPhotoUpload
 } = require('../controllers/bootcamps.js');
 
+const Bootcamp = require('../models/Bootcamp.js');
+
+const advancedResults = require('../middleware/advancedResults.js');
+
 // Include resource routers
 const courseRouter = require('./courses.js');
 
@@ -27,7 +31,7 @@ router.route('/:id/photo')
     .put(bootcampPhotoUpload)
 
 router.route('/')
-    .get(getAllBootcamps) // Get list of all bootcamps
+    .get(advancedResults(Bootcamp, 'courses'), getAllBootcamps) // Get list of all bootcamps
     .post(createBootcamp) // Create a new bootcamp   
     .delete(deleteAllBootcamps) // Delete all bootcamps
 
