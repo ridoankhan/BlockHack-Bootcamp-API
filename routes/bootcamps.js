@@ -10,7 +10,7 @@ const {
     deleteBootcamp,
     deleteBootcampByName,
     deleteAllBootcamps,
-    getRandomQueries
+    bootcampPhotoUpload
 } = require('../controllers/bootcamps.js');
 
 // Include resource routers
@@ -19,16 +19,17 @@ const courseRouter = require('./courses.js');
 // Re-route into other resource router
 router.use('/:bootcampId/courses', courseRouter);
 
+// Get bootcamps within given distance of a zipCode
+router.route('/radius/:zipcode/:distance')
+    .get(getBootcampsInRadius)
+
+router.route('/:id/photo')
+    .put(bootcampPhotoUpload)
+
 router.route('/')
     .get(getAllBootcamps) // Get list of all bootcamps
     .post(createBootcamp) // Create a new bootcamp   
     .delete(deleteAllBootcamps) // Delete all bootcamps
-
-router.route('/random')
-    .get(getRandomQueries)
-
-router.route('/radius/:zipcode/:distance')
-    .get(getBootcampsInRadius) // Get bootcamps within given distance of a zipCode
 
 router.route('/:id')
     .get(getSingleBootcamp) // Get a single bootcamp with bootcamp id
