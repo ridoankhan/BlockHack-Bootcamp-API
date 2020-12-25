@@ -27,8 +27,9 @@ app.use(express.json());
 app.use(cors());
 
 // Route Files
-const bootcamps = require('./routes/bootcamps.js');
-const courses = require('./routes/courses.js');
+const bootcamps = require('./routes/bootcamps');
+const courses = require('./routes/courses');
+const auth = require('./routes/auth');
 
 // Using Logger Middleware
 app.use(morgan('dev'));
@@ -42,6 +43,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Mount Router
 app.use('/api/v1/bootcamps', bootcamps);
 app.use('/api/v1/courses', courses);
+app.use('/api/v1/auth', auth);
 
 app.use(errorHandler);
 

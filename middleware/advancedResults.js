@@ -46,7 +46,7 @@ const advancedResults = (model, populate) => async (req, res, next) => {
     const limit = parseInt(req.query.limit, 10) || 15;
     const startIndex = (page - 1) * limit;
     const endIndex = page * limit;
-    const total = await model.countDocuments()
+    const total = await model.countDocuments();
 
     query = query.limit(limit).skip(startIndex)
 
@@ -84,3 +84,11 @@ const advancedResults = (model, populate) => async (req, res, next) => {
 }
 
 module.exports = advancedResults;
+
+// Dolile koto tk ullekh ase
+// Nam jari (bhumi office) and (city corporation) er
+// Bariri kaj shuru kobe ebong sesh hoche na keno??
+// pura bari kkoi katha
+// City corporation thke rajuk er thke koi tala onumodon ase??
+// Rajuk er genuine plan pass ase kina???
+// 

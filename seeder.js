@@ -31,7 +31,7 @@ const importData = async () => {
         const importResultForBootcamp = await Bootcamp.create(bootcamps);
         const importResultForCourse = await Course.create(courses);
 
-        if (importResultForBootcamp && importResultForCourse) { //importResultForBootcamp && importResultForCourse
+        if (importResultForBootcamp && importResultForCourse) {
             console.log('Successfully Data Imported'.green.inverse)
             process.exit()
         }
@@ -47,7 +47,7 @@ const deleteData = async () => {
         const deleteResultForBootcamp = await Bootcamp.deleteMany()
         const deleteResultForCourse = await Course.deleteMany()
 
-        if (deleteResultForBootcamp && deleteResultForCourse) { // deleteResultForBootcamp && deleteResultForCourse
+        if (deleteResultForBootcamp && deleteResultForCourse) {
             console.log('Deleted Successfully'.green.bgRed)
             process.exit()
         }
