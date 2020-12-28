@@ -1,5 +1,5 @@
-const express = require('express');
-const router = express.Router();
+const express = require('express')
+const router = express.Router()
 const {
     getAllBootcamps,
     getSingleBootcamp,
@@ -11,38 +11,41 @@ const {
     deleteBootcampByName,
     deleteAllBootcamps,
     bootcampPhotoUpload
-} = require('../controllers/bootcamps.js');
-
-const Bootcamp = require('../models/Bootcamp.js');
-
-const advancedResults = require('../middleware/advancedResults.js');
-
+} = require('../controllers/bootcamps')
+const Bootcamp = require('../models/Bootcamp')
+const advancedResults = require('../middleware/advancedResults')
 // Include resource routers
-const courseRouter = require('./courses.js');
+const courseRouter = require('./courses')
+const {
+    protect,
+    authorize
+} = require('../middleware/auth')
+
 
 // Re-route into other resource router
-router.use('/:bootcampId/courses', courseRouter);
+router.use('/:bootcampId/courses', courseRouter)
 
-// Get bootcamps within given distance of a zipCode
-router.route('/radius/:zipcode/:distance')
+
+router.route('/radius/:zipcode/:distance') // Get bootcamps within given distance of a zipCode
     .get(getBootcampsInRadius)
 
+// upload photo for a bootcamp using bootcamp id 
 router.route('/:id/photo')
-    .put(bootcampPhotoUpload)
+    .put(protect, authorize('publisher', 'admin'), bootcampPhotoUpload)
 
 router.route('/')
     .get(advancedResults(Bootcamp, 'courses'), getAllBootcamps) // Get list of all bootcamps
-    .post(createBootcamp) // Create a new bootcamp   
-    .delete(deleteAllBootcamps) // Delete all bootcamps
+    .post(protect, authorize('publisher', 'admin'), createBootcamp) // Create a new bootcamp   
+    .delete(protect, authorize('publisher', 'admin'), deleteAllBootcamps) // Delete all bootcamps
 
 router.route('/:id')
     .get(getSingleBootcamp) // Get a single bootcamp with bootcamp id
-    .put(updateBootcamp) // Update a bootcamp info with id and data
-    .delete(deleteBootcamp) // Delete a bootcamp with an id
+    .put(protect, authorize('publisher', 'admin'), updateBootcamp) // Update a bootcamp info with id and data
+    .delete(protect, authorize('publisher', 'admin'), deleteBootcamp) // Delete a bootcamp with an id
 
 router.route('/name/:name')
     .get(getBootcampByName) // Delete a bootcamp by bootcamp-name
-    .delete(deleteBootcampByName) // Delete list of all bootcamps
+    .delete(protect, authorize('publisher', 'admin'), deleteBootcampByName) // Delete list of all bootcamps
 
 
 module.exports = router;

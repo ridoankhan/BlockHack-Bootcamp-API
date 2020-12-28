@@ -1,9 +1,8 @@
-const express = require('express');
-
+const express = require('express')
 const router = express.Router({
     // Enabling other resources to be routed here inside
     mergeParams: true
-});
+})
 
 const {
     getAllCourses,
@@ -11,21 +10,28 @@ const {
     addCourse,
     updateCourse,
     deleteCourse
-} = require('../controllers/courses.js');
+} = require('../controllers/courses')
 
-const Course = require('../models/Course.js');
-const advancedResults = require('../middleware/advancedResults.js');
+const Course = require('../models/Course')
+
+const advancedResults = require('../middleware/advancedResults')
+const {
+    protect,
+    authorize
+} = require('../middleware/auth')
+
+
 
 router.route('/')
     .get(advancedResults(Course, {
         path: 'bootcamp',
         select: 'name description'
     }), getAllCourses)
-    .post(addCourse)
+    .post(protect, authorize('publisher', 'admin'), addCourse)
 
 router.route('/:id')
     .get(getSingleCourse)
-    .put(updateCourse)
-    .delete(deleteCourse)
+    .put(protect, authorize('publisher', 'admin'), updateCourse)
+    .delete(protect, authorize('publisher', 'admin'), deleteCourse)
 
 module.exports = router;

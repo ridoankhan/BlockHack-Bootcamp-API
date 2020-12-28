@@ -6,6 +6,7 @@ const colors = require("colors");
 const errorHandler = require('./Middleware/error');
 const connectDB = require("./config/db");
 const fileUpload = require('express-fileupload');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 
 // My custom middleware for loggin
@@ -22,6 +23,9 @@ const app = express();
 
 // Body Parser
 app.use(express.json());
+
+// Cookie Parser
+app.use(cookieParser());
 
 // Handle Cors Error
 app.use(cors());
@@ -52,7 +56,7 @@ const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {
   console.log(
     `The server is running in ${process.env.NODE_ENV} mode on http://localhost:${PORT}`.yellow
-      .bold
+    .bold
   );
 });
 
