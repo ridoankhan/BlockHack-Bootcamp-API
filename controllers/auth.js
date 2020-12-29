@@ -1,11 +1,11 @@
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const User = require('../models/User');
+const errorResponse = require('../utils/errorResponse');
 
 // @Desc    Register a user
 // @Route   POST /api/v1/auth/register
 // @Access  Public
-
 const registerUser = asyncHandler(async (req, res, next) => {
     const {
         name,
@@ -27,7 +27,6 @@ const registerUser = asyncHandler(async (req, res, next) => {
 // @Desc    Login user
 // @Route   POST  /api/v1/auth/login
 // @Access  Public
-
 const loginUser = asyncHandler(async (req, res, next) => {
     const {
         email,
@@ -62,25 +61,50 @@ const loginUser = asyncHandler(async (req, res, next) => {
 // @Desc    To get the cuurent user info (user profile)
 // @Route   GET /api/v1/auth/me
 // @Access  Private
-
-const currentUser = asyncHandler(async (req, res, next) => {
+const getCurrentUser = asyncHandler(async (req, res, next) => {
     const user = await User.findById(req.user.id)
 
     res.status(200).json({
         success: true,
         data: user
-    })
+    });
 })
+
+// @Desc    Forgot password
+// @Route   POST /api/v1/auth/forgotpassword
+// @Access  Public
+const forgotPassword = asyncHandler(async (req, res, next) => {
+    const user = await User.findOne({
+        email: req.body.email
+    });
+
+    if (!user) {
+        return next(new errorResponse(`There is no user with email of ${req.body.email}`, 404));
+    }
+
+    // Get reset token
+    const resetToken = user.getResetPasswordToken();
+
+    await user.save({
+        validateBeforeSave: false
+    });
+
+    res.status(200).json({
+        success: true,
+        data: user
+    })
+
+});
 
 // Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
     // Create token
-    const token = user.getSignedJwtToken();
+    const token = user.getSignedJwtToken()
 
     const options = {
         expires: new Date(Date.now() + process.env.JWT_COOKIE_EXPIRE * 24 * 60 * 60 * 1000),
         httpOnly: true
-    };
+    }
 
     if (process.env.NODE_ENV === 'production') {
         options.secure = true
@@ -89,11 +113,12 @@ const sendTokenResponse = (user, statusCode, res) => {
     res.status(statusCode).cookie('token', token, options).json({
         success: true,
         token
-    });
+    })
 }
 
 module.exports = {
     registerUser,
     loginUser,
-    currentUser
+    getCurrentUser,
+    forgotPassword
 };
