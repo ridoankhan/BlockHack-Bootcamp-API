@@ -1,18 +1,14 @@
+const crypto = require('crypto');
 const ErrorResponse = require('../utils/errorResponse');
 const asyncHandler = require('../middleware/async');
 const User = require('../models/User');
-const errorResponse = require('../utils/errorResponse');
+const sendEmail = require('../utils/sendEmail');
 
 // @Desc    Register a user
 // @Route   POST /api/v1/auth/register
 // @Access  Public
 const registerUser = asyncHandler(async (req, res, next) => {
-    const {
-        name,
-        email,
-        password,
-        role
-    } = req.body;
+    const { name, email, password, role } = req.body;
 
     const user = await User.create({
         name,
@@ -79,15 +75,39 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
     });
 
     if (!user) {
-        return next(new errorResponse(`There is no user with email of ${req.body.email}`, 404));
+        return next(new ErrorResponse(`There is no user with email of ${req.body.email}`, 404));
     }
 
     // Get reset token
     const resetToken = user.getResetPasswordToken();
 
-    await user.save({
-        validateBeforeSave: false
-    });
+    await user.save({ validateBeforeSave: false });
+
+    const resetUrl = `${req.protocol}://${req.get('host')}/api/v1/auth/resetpassword/${resetToken}`;
+
+    const message = `You are receiving this email because you or someone else has requested the reset of a password. Please
+                     make a PUT request to \n\n${resetUrl}`;
+    try {
+        await sendEmail({
+            email: user.email,
+            subject: 'Password Reset Token',
+            message: message
+        });
+
+        res.status(200).json({
+            success: true,
+            data: 'Email Sent'
+        })
+
+    } catch (err) {
+        console.log(err);
+        user.resetPasswordToken = undefined;
+        user.resetPasswordExpire = undefined;
+
+        await user.save({ validateBeforeSave: false })
+
+        return next(new ErrorResponse(`Email could not be sent`, 500))
+    }
 
     res.status(200).json({
         success: true,
@@ -95,6 +115,68 @@ const forgotPassword = asyncHandler(async (req, res, next) => {
     })
 
 });
+
+
+// @Desc    Reset Password
+// @Route   PUT /api/v1/auth/resetpassword/:resettoken
+// @Access  Public
+const resetPassword = asyncHandler( async (req, res, next) => {
+    const resetPasswordToken = crypto.createHash('sha256').update(req.params.resettoken).digest('hex');
+
+    const user = await User.findOne({
+        resetPasswordToken: resetPasswordToken,
+        resetPasswordExpire: { $gt: Date.now() }
+    })
+    
+    if(!user){
+        return next(new ErrorResponse('Invalid token', 400))
+    }
+
+    // Set new password
+    user.password = req.body.password;
+    user.resetPasswordToken = undefined;
+    user.resetPasswordExpire = undefined;
+    await user.save();
+
+    sendTokenResponse(user, 200, res)
+});
+
+// @Desc    Update User Details
+// @Route   PUT /api/v1/auth/updatedetails
+// @Access  Private
+const updateDetails = asyncHandler( async (req, res, next) => {
+    const fieldsToUpdate = {
+        name: req.body.name,
+        email: req.body.email
+    };
+
+    const user = await User.findByIdAndUpdate(req.user.id, fieldsToUpdate, {
+        new: true,
+        runValidators: true
+    });
+
+    res.status(200).json({
+        success: true,
+        data: user
+    })
+});
+
+// @Desc    Update Password
+// @Route   PUT /api/v1/auth/updatepassword
+// @Access  Private
+const updatePassword = asyncHandler( async(req, res, next) =>  {
+    const user = await User.findById(req.user.id).select('+password');
+
+    // Check current password
+    if(!(await user.matchPassword(req.body.currentPassword))){
+        return next(new ErrorResponse(`Password is incorrect`, 401))
+    }
+
+    user.password = req.body.newPassword;
+    await user.save();
+
+    sendTokenResponse(user, 200, res);
+})
 
 // Get token from model, create cookie and send response
 const sendTokenResponse = (user, statusCode, res) => {
@@ -120,5 +202,8 @@ module.exports = {
     registerUser,
     loginUser,
     getCurrentUser,
-    forgotPassword
+    forgotPassword,
+    resetPassword,
+    updateDetails,
+    updatePassword
 };

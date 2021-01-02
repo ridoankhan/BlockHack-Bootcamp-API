@@ -2,9 +2,6 @@ const crypto = require('crypto');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
-const {
-    nextTick
-} = require('process');
 
 const UserSchema = new mongoose.Schema({
     name: {
