@@ -1,8 +1,7 @@
 const ErrorResponse = require('../utils/errorResponse')
+const asyncHandler = require('../middleware/async')
 const Course = require('../models/Course')
 const Bootcamp = require('../models/Bootcamp')
-const asyncHandler = require('../middleware/async')
-const errorResponse = require('../utils/errorResponse')
 
 // @Desc    to get courses
 // @Route   GET /api/v1/courses
@@ -45,7 +44,7 @@ const getSingleCourse = asyncHandler(async (req, res, next) => {
 })
 
 // @Desc    Add a new course
-// @Route   /api/v1/courses
+// @Route   /api/v1/bootcamps/:bootcampId/courses
 // @Access  Private
 const addCourse = asyncHandler(async (req, res, next) => {
     req.body.bootcamp = req.params.bootcampId;
@@ -60,7 +59,7 @@ const addCourse = asyncHandler(async (req, res, next) => {
 
     // Make sure if cuurent logged-in user is the course owner
     if (bootcamp.user.toString() !== req.user.id && req.user.id !== 'admin') {
-        return next(new errorResponse(`User ${req.user.id} is not authorized to add a course to bootcamp id: ${bootcamp._id}`, 401))
+        return next(new ErrorResponse(`User ${req.user.id} is not authorized to add a course to bootcamp id: ${bootcamp._id}`, 401))
     }
 
     const course = await Course.create(req.body)
@@ -83,7 +82,7 @@ const updateCourse = asyncHandler(async (req, res, next) => {
 
     // Make sure the curernt logged-in user is the course owner
     if (course.user.toString() !== req.user.id && req.user.role !== 'admin') {
-        return next(new errorResponse(`User ${req.user.id} is not authorized to update course ${course._id}`, 401))
+        return next(new ErrorResponse(`User ${req.user.id} is not authorized to update course ${course._id}`, 401))
     }
 
     course = await Course.findByIdAndUpdate(req.params.id, req.body, {
@@ -109,7 +108,7 @@ const deleteCourse = asyncHandler(async (req, res, next) => {
 
     // Make sure the curernt logged-in user is the course owner
     if (course.user.toString() !== req.user.id && req.user.role !== 'admin') {
-        return next(new errorResponse(`User ${req.user.id} is not authorized to delete course ${course._id}`, 401))
+        return next(new ErrorResponse(`User ${req.user.id} is not authorized to delete course ${course._id}`, 401))
 
     }
 
