@@ -12,6 +12,7 @@ dotenv.config({
 const Bootcamp = require('./models/Bootcamp')
 const Course = require('./models/Course')
 const User = require('./models/User')
+const Review = require('./models/Review')
 
 // Connect to DB
 mongoose.connect(process.env.MONGO_URI, {
@@ -26,6 +27,7 @@ mongoose.connect(process.env.MONGO_URI, {
 const bootcamps = JSON.parse(fs.readFileSync(`${__dirname}/data/bootcamps.json`, 'utf-8'))
 const courses = JSON.parse(fs.readFileSync(`${__dirname}/data/courses.json`, 'utf-8'))
 const users = JSON.parse(fs.readFileSync(`${__dirname}/data/users.json`, 'utf-8'))
+const reviews = JSON.parse(fs.readFileSync(`${__dirname}/data/reviews.json`, 'utf-8'))
 
 // Import data from bootcamp.json file to the bootcamp collection
 const importData = async () => {
@@ -33,8 +35,9 @@ const importData = async () => {
         const importResultForBootcamp = await Bootcamp.create(bootcamps);
         const importResultForCourse = await Course.create(courses);
         const importedResultForUser = await User.create(users);
+        const importedResultForReview = await Review.create(reviews);
 
-        if (importResultForBootcamp && importResultForCourse && importedResultForUser) {
+        if (importResultForBootcamp && importResultForCourse && importedResultForUser && importedResultForReview) {
             console.log('Successfully Data Imported'.green.inverse)
             process.exit()
         }
@@ -50,6 +53,7 @@ const deleteData = async () => {
         const deleteResultForBootcamp = await Bootcamp.deleteMany()
         const deleteResultForCourse = await Course.deleteMany()
         const deleteResultForUser = await User.deleteMany()
+        const deleteResultForReview = await Review.deleteMany()
 
         console.log('Deleted Successfully'.green.bgRed)
         process.exit()
