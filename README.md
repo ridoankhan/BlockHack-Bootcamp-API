@@ -9,3 +9,7 @@
  Chrome
 
  You can install the extension called Disable Content-Security-Policy to disable CSP.
+ 
+ 
+For Degital-ocean tutorial:
+https://gist.github.com/bradtraversy/cd90d1ed3c462fe3bddd11bf8953a896
