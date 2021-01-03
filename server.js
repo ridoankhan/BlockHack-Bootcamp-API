@@ -3,7 +3,7 @@ const express = require("express");
 const dotenv = require("dotenv");
 const morgan = require("morgan");
 const colors = require("colors");
-const errorHandler = require('./Middleware/error');
+const errorHandler = require('./middleware/error');
 const connectDB = require("./config/db");
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
@@ -86,7 +86,7 @@ const PORT = process.env.PORT || 3000;
 const server = app.listen(PORT, () => {
   console.log(
     `The server is running in ${process.env.NODE_ENV} mode on http://localhost:${PORT}`.yellow
-    .bold
+      .bold
   );
 });
 
@@ -97,8 +97,3 @@ process.on("unhandledRejection", (err, promise) => {
   // Close server & exit process
   server.close(() => process.exit(1));
 });
-
-// Documentation published at below URL:
-// https://documenter.getpostman.com/view/4519349/TVt2cizW
-// To generate document with docgen just copy the exe and exported json in the same directory and the following command
-// cmd /K "windows_amd64_2.exe" build -i BH.postman_collection.json -o index.html

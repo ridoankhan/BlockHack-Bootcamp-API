@@ -7878,7 +7878,7 @@
         background-color: #000;
         background-color: transparent;
         border: 1px solid #fff;
-        border-radius: 10px;
+        border-radius: 10px
     }
 
     .carousel-indicators .active {
@@ -8471,7 +8471,9 @@
             <div class=col-md-9>
                 <div class="panel panel-default">
                     <div class=panel-heading>
-                        <h3 class=panel-title id=Authentication>Authentication<span class=badge>7</span></h3>
+                        <h3 class=panel-title id=Authentication>Authentication
+                            <span class=badge>7</span>
+                        </h3>
                     </div>
                     <div class=panel-body>
                         <p>
@@ -8479,19 +8481,18 @@
                         <div class=request-item>
                             <div class=panel-group id=accordion-Authentication>
                                 <div class="panel panel-success" id=jump-Authentication-ForgotPassword>
-                                    <div class=panel-heading><small class="pull-right text-muted">raw</small> <a
-                                            class=text-success data-toggle=collapse
-                                            data-parent=#accordion-Authentication
+                                    <div class=panel-heading><small class="pull-right text-muted">raw</small>
+                                        <a class=text-success data-toggle=collapse data-parent=#accordion-Authentication
                                             href=#collapse-Authentication-ForgotPassword>
                                             <h4 class=panel-title><span
                                                     class="glyphicon glyphicon-plus"></span><strong>Forgot
                                                     Password</strong> &nbsp;|&nbsp;
-                                                /* <strong class="request-method border-success">POST</strong> */
-                                                <strong class="request-method border-success"> POST</strong>
+                                                <strong class="request-method border-success">POST</strong>
                                                 &nbsp;
                                                 {{URL}}/api/v1/auth/forgotPassword
                                             </h4>
-                                        </a></div>
+                                        </a>
+                                    </div>
                                     <div id=collapse-Authentication-ForgotPassword class="panel-collapse collapse">
                                         <div class=panel-body>
                                             <h5 class="label label-default">Description</h5><br><small>
@@ -8807,7 +8808,11 @@
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Bootcamp-DeleteAllBootcamps class="panel-collapse collapse">
-                                        <div class=panel-body></div>
+                                        <div class=panel-body>
+                                            <h5 class="label label-default">Description</h5><br><small>
+                                                <p>Delete the list of all existing bootcamps from the database
+                                            </small><br><br>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="panel panel-danger" id=jump-Bootcamp-DeleteBootcampByName>
@@ -8823,7 +8828,11 @@
                                             </h4>
                                         </a></div>
                                     <div id=collapse-Bootcamp-DeleteBootcampByName class="panel-collapse collapse">
-                                        <div class=panel-body></div>
+                                        <div class=panel-body>
+                                            <h5 class="label label-default">Description</h5><br><small>
+                                                <p>Delete a specific bootcamp from the database with bootcamp name
+                                            </small><br><br>
+                                        </div>
                                     </div>
                                 </div>
                                 <div class="panel panel-danger" id=jump-Bootcamp-Deletebootcamp>
@@ -8946,6 +8955,35 @@
                                             <h5 class="label label-default">Description</h5><br><small>
                                                 <p>Get the list of all available bootcamps from database
                                             </small><br><br>
+                                            <h5 class="label label-info">Query</h5>
+                                            <table class="table table-hover">
+                                                <thead>
+                                                    <tr>
+                                                        <th>Key
+                                                        <th>Value
+                                                        <th>Description
+                                                <tbody>
+                                                    <tr>
+                                                        <td>select
+                                                        <td>name,description,photo
+                                                        <td>
+                                                    <tr>
+                                                        <td>sort
+                                                        <td>name
+                                                        <td>
+                                                    <tr>
+                                                        <td>page
+                                                        <td>1
+                                                        <td>
+                                                    <tr>
+                                                        <td>limit
+                                                        <td>10
+                                                        <td>
+                                                    <tr>
+                                                        <td>averageCost[gte]
+                                                        <td>500
+                                                        <td>
+                                            </table>
                                         </div>
                                     </div>
                                 </div>
@@ -8991,7 +9029,8 @@
                                     <div id=collapse-Bootcamp-UploadPhoto class="panel-collapse collapse">
                                         <div class=panel-body>
                                             <h5 class="label label-default">Description</h5><br><small>
-                                                <p>Route to upload photo for a specific bootcamp
+                                                <p>Route to upload photo for a specific bootcamp. One photo can be
+                                                    uploaded per bootcamp
                                             </small><br><br>
                                             <h5 class="label label-primary">Body</h5>
                                             <table class="table table-hover">
@@ -9005,6 +9044,7 @@
                                                         <td>file
                                                         <td>
                                                         <td>
+                                                            <p>An Image File to be uploaded with any valid image format
                                             </table>
                                         </div>
                                     </div>
@@ -9450,7 +9490,7 @@
                                     <div id=collapse-Users-CreateUser class="panel-collapse collapse">
                                         <div class=panel-body>
                                             <h5 class="label label-default">Description</h5><br><small>
-                                                <p>Create a new user (admin)
+                                                <p>Create a new user (only admin)
                                             </small><br><br>
                                             <h5 class="label label-warning">Headers</h5>
                                             <table class="table table-hover">
@@ -9490,7 +9530,7 @@
                                     <div id=collapse-Users-Deleteuser class="panel-collapse collapse">
                                         <div class=panel-body>
                                             <h5 class="label label-default">Description</h5><br><small>
-                                                <p>Delete a user from the database
+                                                <p>Delete a user from the database (only admin)
                                             </small><br><br>
                                         </div>
                                     </div>
@@ -9510,7 +9550,7 @@
                                     <div id=collapse-Users-GetAllUsers class="panel-collapse collapse">
                                         <div class=panel-body>
                                             <h5 class="label label-default">Description</h5><br><small>
-                                                <p>Get the list of all user only available to admin
+                                                <p>Get the list of all user (only admin)
                                             </small><br><br>
                                         </div>
                                     </div>
@@ -9530,7 +9570,7 @@
                                     <div id=collapse-Users-GetSingleUser class="panel-collapse collapse">
                                         <div class=panel-body>
                                             <h5 class="label label-default">Description</h5><br><small>
-                                                <p>Get a single user by id (admin)
+                                                <p>Get a single user by id (only admin)
                                             </small><br><br>
                                         </div>
                                     </div>
@@ -9551,7 +9591,7 @@
                                     <div id=collapse-Users-UpdateUser class="panel-collapse collapse">
                                         <div class=panel-body>
                                             <h5 class="label label-default">Description</h5><br><small>
-                                                <p>Update a user with id (admin)
+                                                <p>Update a user record in the database with user id (only admin)
                                             </small><br><br>
                                             <h5 class="label label-warning">Headers</h5>
                                             <table class="table table-hover">
@@ -9604,9 +9644,9 @@
         <div class=container-fluid>
             <div class="span12 text-center"><span data-toggle=tooltip
                     title="If the application help you, please feel free to give a star to the project in github. Your star inspire me to work more on open-source projects like this!">Made
-                    with <em class=love-color>&#9829;</em> by <a href=https://github.com/thedevsaddam target=_blank
-                        class=text-muted>thedevsaddam</a> | Generated at: 2021-01-03 19:53:17 by <a
-                        href=https://github.com/thedevsaddam/docgen target=_blank class=text-muted>docgen</a></span>
-            </div>
+                    with <em class=love-color>&#9829;</em> by <a href=https://github.com/ridoankhan target=_blank
+                        class=text-muted>Ridoan Khan</a> | Generated at: 2021-01-04 00:18:55 by <a
+                        href=https://github.com/ridoankhan/blockHack-bootcamp-api target=_blank
+                        class=text-muted>docgen</a></span></div>
         </div>
     </footer>
