@@ -23,6 +23,7 @@ dotenv.config({ path: "./config/config.env" });
 
 // Connect Database
 connectDB();
+
 const app = express();
 
 // Body Parser
@@ -96,3 +97,8 @@ process.on("unhandledRejection", (err, promise) => {
   // Close server & exit process
   server.close(() => process.exit(1));
 });
+
+// Documentation published at below URL:
+// https://documenter.getpostman.com/view/4519349/TVt2cizW
+// To generate document with docgen just copy the exe and exported json in the same directory and the following command
+// cmd /K "windows_amd64_2.exe" build -i BH.postman_collection.json -o index.html
