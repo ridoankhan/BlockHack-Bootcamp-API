@@ -22,11 +22,13 @@ npm start
 To seed the database with users, bootcamps, courses and reviews with data from the "data" folder, run
 
 # Destroy all data
+```
 node seeder.js -delete
-
+```
 # Import all data
+```
 node seeder.js -import
-
+```
 Demo
 
 The API is live at blockhack-bootcamp.tk
