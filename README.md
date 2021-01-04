@@ -1,10 +1,5 @@
-<<<<<<< HEAD
-# bootcamp-api
-An API for Bootcamp management on different learning topics
-=======
-DevCamper API
-
-    Backend API for BlockHack Bootcamp application, which is a bootcamp directory website
+# BlockHack Bootcamp API
+Backend API for BlockHack Bootcamp application, which is a bootcamp finding website
 
 Usage
 
@@ -23,7 +18,7 @@ npm start
 
 # Database Seeder
 
-To seed the database with users, bootcamps, courses and reviews with data from the "_data" folder, run
+To seed the database with users, bootcamps, courses and reviews with data from the "data" folder, run
 
 # Destroy all data
 node seeder.js -delete
