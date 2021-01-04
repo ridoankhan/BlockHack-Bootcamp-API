@@ -55,4 +55,3 @@ Extensive documentation with examples can be found at: https://documenter.getpos
  
 For Degital-ocean tutorial:
 https://gist.github.com/bradtraversy/cd90d1ed3c462fe3bddd11bf8953a896 -->
->>>>>>> dev
