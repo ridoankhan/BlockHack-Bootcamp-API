@@ -53,6 +53,22 @@ const loginUser = asyncHandler(async (req, res, next) => {
     sendTokenResponse(user, 200, res)
 });
 
+// @Desc    Logout User
+// @Route   GET /api/v1/auth/logout
+// @Access  Private
+const logoutUser = asyncHandler( async(req, res, next) => {
+    const options = {
+        expires: new Date(Date.now() + 10 * 1000),
+        httpOnly: true
+    }
+
+    res.cookie('token', 'none', options);
+
+    res.status(200).json({
+        success: true,
+        data: {}
+    })
+});
 
 // @Desc    To get the cuurent user info (user profile)
 // @Route   GET /api/v1/auth/me
@@ -201,6 +217,7 @@ const sendTokenResponse = (user, statusCode, res) => {
 module.exports = {
     registerUser,
     loginUser,
+    logoutUser,
     getCurrentUser,
     forgotPassword,
     resetPassword,

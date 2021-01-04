@@ -4,6 +4,7 @@ const router = express.Router()
 const {
     registerUser,
     loginUser,
+    logoutUser,
     getCurrentUser,
     forgotPassword,
     resetPassword,
@@ -20,6 +21,8 @@ const { route } = require('./courses')
 router.post('/register', registerUser)
 
 router.post('/login', loginUser)
+
+router.get('/logout', logoutUser)
 
 router.get('/me', protect, getCurrentUser)
 

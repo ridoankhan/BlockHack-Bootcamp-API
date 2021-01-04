@@ -40,7 +40,7 @@ ReviewSchema.index({ bootcamp: 1, user: 1 }, {  unique: true });
 // Static method to get average of ratings for a bootcamp
 ReviewSchema.statics.getAverageRating = async function (bootcampId) {
 
-  console.log(`Calculating averge rating`.blue);
+  // console.log(`Calculating averge rating`.blue);
   const obj = await this.aggregate([
     {
       $match: { bootcamp: bootcampId }

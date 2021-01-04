@@ -10,11 +10,10 @@ const protect = asyncHandler(async (req, res, next) => {
     if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
         // Set token from Bearer token in header
         token = req.headers.authorization.split(' ')[1]
+    } else if (req.cookies.token) {
+        // Set token from cookie in header
+        token = req.cookies.token;
     }
-    // else if (req.cookie.token) {
-    //     // Set token from cookie in header
-    //     token = req.cookie.token
-    // }
 
     if (!token) {
         return next(new ErrorResponse(`Not authorized to access this route`, 401))
