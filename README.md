@@ -31,7 +31,7 @@ node seeder.js -import
 ```
 Demo
 
-The API is live at http://115.127.24.181:3000
+The API is live at http://115.127.24.181:3000/api-docs
 
 Extensive documentation with examples can be found at: https://documenter.getpostman.com/view/4519349/TVt2cizW
 
