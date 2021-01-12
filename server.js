@@ -7,6 +7,8 @@ const errorHandler = require('./middleware/error');
 const connectDB = require("./config/db");
 const fileUpload = require('express-fileupload');
 const cookieParser = require('cookie-parser');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDocument = require('./swagger.json');
 // Security pacakges
 const mongoSanitize = require('express-mongo-sanitize');
 const helmet = require('helmet');
@@ -72,6 +74,8 @@ app.use(fileUpload());
 // Set static folder
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Set swagger path
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 // Mount Router
 app.use('/api/v1/bootcamps', bootcamps);
 app.use('/api/v1/courses', courses);
