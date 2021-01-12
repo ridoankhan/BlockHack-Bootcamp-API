@@ -31,7 +31,7 @@ node seeder.js -import
 ```
 Demo
 
-The API is live at blockhackbootcamp.tk
+The API is live at http://115.127.24.181:3000
 
 Extensive documentation with examples can be found at: https://documenter.getpostman.com/view/4519349/TVt2cizW
 
